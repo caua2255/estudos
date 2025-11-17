@@ -3,20 +3,15 @@ name: Propagar commits para repositórios pais
 on:
   push:
     paths:
-      - 'python/aritmetica/soma/**'   # Monitora mudanças dentro de soma
+      - 'python/aritmetica/soma/**'
 
 jobs:
   propagate:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checar repositório
       uses: actions/checkout@v2
-
-    - name: Configurar Git
-      run: |
-        git config --global user.name "Seu Nome"
-        git config --global user.email "seu-email@dominio.com"
 
     - name: Propagar para o repositório python
       run: |
