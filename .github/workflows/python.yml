@@ -1,28 +1,43 @@
-name: Python Workflow
+name: Propagar commits para repositórios pais
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'python/aritmetica/soma/**'   # Monitora mudanças dentro de soma
 
 jobs:
-  build:
+  propagate:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Check out repository
+    - name: Checar repositório
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-        
-    - name: Install dependencies
+    - name: Configurar Git
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Run tests
+        git config --global user.name "Seu Nome"
+        git config --global user.email "seu-email@dominio.com"
+
+    - name: Propagar para o repositório python
       run: |
-        python -m unittest discover
+        git remote add python https://github.com/seu-usuario/python-repo.git
+        git fetch python
+        git checkout python/main
+        git merge --no-ff HEAD --strategy-option=theirs
+        git push python main
+
+    - name: Propagar para o repositório aritmetica
+      run: |
+        git remote add aritmetica https://github.com/seu-usuario/aritmetica-repo.git
+        git fetch aritmetica
+        git checkout aritmetica/main
+        git merge --no-ff HEAD --strategy-option=theirs
+        git push aritmetica main
+
+    - name: Propagar para o repositório estudos
+      run: |
+        git remote add estudos https://github.com/seu-usuario/estudos.git
+        git fetch estudos
+        git checkout estudos/main
+        git merge --no-ff HEAD --strategy-option=theirs
+        git push estudos main
